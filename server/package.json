@@ -1,0 +1,21 @@
+{
+  "name": "worldtime-server",
+  "version": "1.0.0",
+  "description": "Server for the worldtime app",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Cosmin Simon",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
+    "express": "^4.16.2",
+    "jsonwebtoken": "^8.1.0",
+    "mongoose": "^4.13.9",
+    "nodemon": "^1.14.11"
+  }
+}
