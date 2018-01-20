@@ -14,6 +14,8 @@ import {HttpClientModule} from "@angular/common/http";
 import {AppConfig} from "./app.config";
 import { DashboardComponent } from './page/dashboard/dashboard.component';
 import {TimeService} from "./services/time.service";
+import { SinglezoneComponent } from './components/singlezone/singlezone.component';
+import {ZoneService} from "./services/zone.service";
 
 
 @NgModule({
@@ -23,7 +25,8 @@ import {TimeService} from "./services/time.service";
     LoginComponent,
     HomeComponent,
     SignupComponent,
-    DashboardComponent
+    DashboardComponent,
+    SinglezoneComponent
   ],
   imports: [
     BrowserModule,
@@ -33,6 +36,7 @@ import {TimeService} from "./services/time.service";
   ],
   providers: [
     UserService,
+    ZoneService,
     TimeService,
     AppConfig
   ],

@@ -11,6 +11,7 @@ const zoneDb = require('../models/timezone');
 
 router.post('/', function(req, res) {
     var token = req.headers['x-access-token'];
+    console.log('token on add zone:', req.body);
     if (token) {
         jwt.verify(token, config.secret, function(err, decoded) {
             if (err) {

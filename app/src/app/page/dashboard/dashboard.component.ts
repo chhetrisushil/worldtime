@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {UserService} from "../../services/user.service";
+import {User} from "../../models/user.model";
+import {current} from "codelyzer/util/syntaxKind";
+import {Zone} from "../../models/zone.model";
 
 @Component({
   selector: 'app-dashboard',
@@ -7,9 +11,28 @@ import { Component, OnInit } from '@angular/core';
 })
 export class DashboardComponent implements OnInit {
 
-  constructor() { }
+  zones = [];
+
+  constructor(private userService:UserService,
+              private changeRef:ChangeDetectorRef) { }
 
   ngOnInit() {
+    this.zones = this.userService.currentUser.zones;
+    this.userService.userActivated.subscribe(
+      (currentUser:User) => {
+        if (currentUser) {
+          this.zones = currentUser.zones;
+          console.log('zones:', this.zones);
+          //this.changeRef.detectChanges();
+        }
+      }
+    )
+  }
+
+  addZone() {
+    let emptyZone = new Zone();
+    this.zones.push(emptyZone);
+    console.log(this.zones);
   }
 
 }

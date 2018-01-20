@@ -4,15 +4,19 @@ import {User} from '../models/user.model';
 import {HttpClient} from "@angular/common/http";
 import {AppConfig} from "../app.config";
 import {Subject} from "rxjs/Subject";
+import {ZoneService} from "./zone.service";
 
 @Injectable()
 export class UserService {
 
-  currentUser:User;
+  currentUser:User = new User;
   userActivated = new Subject();
 
   constructor(private httpClient: HttpClient,
-              private config: AppConfig) {}
+              private config: AppConfig,
+              private zoneService:ZoneService) {
+    this.currentUser.zones = [];
+  }
 
   createNewUser(user: User, pass:string) {
     return this.httpClient.post(this.config.apiUrl+'/users/register',
@@ -31,7 +35,26 @@ export class UserService {
     this.currentUser.parse(user.user);
     this.currentUser.token = user.token;
     console.log('current user set to ', this.currentUser);
-    this.userActivated.next(this.currentUser)
+    this.userActivated.next(this.currentUser);
+  }
+
+  refreshCurrentUser() {
+    this.userActivated.next(this.currentUser);
+  }
+
+  refreshZones() {
+    this.zoneService.getZonesForUser(
+      this.currentUser.id,
+      this.currentUser.token)
+      .subscribe(
+        (zones:Object) => {
+          this.currentUser.zones = zones;
+          this.refreshCurrentUser();
+        },
+        error => {
+          console.log('error in refreshZones');
+        }
+      )
   }
 
   logout() {
