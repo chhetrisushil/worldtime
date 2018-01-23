@@ -1,7 +1,6 @@
 import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {User} from "../../models/user.model";
-import {current} from "codelyzer/util/syntaxKind";
 import {Zone} from "../../models/zone.model";
 
 @Component({

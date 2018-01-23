@@ -56,4 +56,5 @@ export class ZoneService {
         headers: new HttpHeaders().set('x-access-token', token)
       })
   }
+
 }

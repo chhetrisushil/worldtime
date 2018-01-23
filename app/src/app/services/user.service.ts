@@ -15,7 +15,7 @@ export class UserService {
   constructor(private httpClient: HttpClient,
               private config: AppConfig,
               private zoneService:ZoneService) {
-
+    this.currentUser.zones = [];
   }
 
   createNewUser(user: User, pass:string) {
@@ -43,6 +43,7 @@ export class UserService {
   }
 
   refreshZones() {
+
     this.zoneService.getZonesForCurrentUser(
       this.currentUser._id,
       this.currentUser.token)

@@ -78,7 +78,6 @@ export class SinglezoneComponent implements OnInit {
       data => {
         console.log('data after operation:', data);
         this.removeZone();
-
       },
       error => {
 

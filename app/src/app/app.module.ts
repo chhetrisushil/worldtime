@@ -21,7 +21,6 @@ import { SingleUserComponent } from './components/single-user/single-user.compon
 import {AuthGuard} from "./guards/auth-guard.service";
 import { UserDetailComponent } from './page/user-detail/user-detail.component';
 
-
 @NgModule({
   declarations: [
     AppComponent,
