@@ -1,9 +1,11 @@
-export class User {
-  token: string;
-  username: string;
-  _id: string;
-  role: number;
-  zones: any;
+export class Zone {
+  name:string;
+  city:string;
+  offset:number;
+  editMode:boolean = true;
+  _id:string;
+
+  constructor() {}
 
   parse(data:any) {
     //console.log('parse idea', data);

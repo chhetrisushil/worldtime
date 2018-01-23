@@ -1,0 +1,12 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="text-center">Welcome to your dashboard!</div>
+      <div class="text-center">These are the timezones you added:</div>
+      <div class="col-sm-12" *ngFor="let user of users">
+        <app-single-user [user]="user"></app-single-user>
+      </div>
+      <div class="text-center"></div>
+    </div>
+  </div>
+</div>

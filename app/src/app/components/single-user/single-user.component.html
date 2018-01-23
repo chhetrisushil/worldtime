@@ -1,0 +1,14 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2">{{user.username}}</div>
+    <div class="col-sm-2">{{roles[user.role]}}</div>
+    <div class="col-sm-6">
+      <button class="btn btn-warning"
+              [disabled]="isCurrentUser" *ngIf="isAdmin"
+              (click)="onDetails()">Details</button>
+      <button class="btn btn-danger"
+              [disabled]="isCurrentUser"
+              (click)="onDelete()">Delete</button>
+    </div>
+  </div>
+</div>

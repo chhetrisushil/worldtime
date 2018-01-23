@@ -4,13 +4,20 @@ import {LoginComponent} from "./page/login/login.component";
 import {HomeComponent} from "./page/home/home.component";
 import {SignupComponent} from "./page/signup/signup.component";
 import {DashboardComponent} from "./page/dashboard/dashboard.component";
+import {UsersComponent} from "./page/users/users.component";
+import {AuthGuard} from "./guards/auth-guard.service";
+import {UserDetailComponent} from "./page/user-detail/user-detail.component";
 
 const appRoutes:Routes = [
 
   {path: '', component: HomeComponent, pathMatch: 'full'},
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignupComponent},
-  {path: 'zones', component: DashboardComponent}
+  {path: 'zones', canActivate:[AuthGuard],component: DashboardComponent},
+  {path: 'users', canActivate:[AuthGuard], component: UsersComponent},
+  {path: 'details/:id', canActivate:[AuthGuard], component: UserDetailComponent},
+
+  {path:'**', redirectTo:''}
 
 /*
   {path: 'imagine', component: ImagineDetailsComponent},

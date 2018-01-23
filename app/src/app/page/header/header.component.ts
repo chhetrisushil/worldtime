@@ -13,6 +13,7 @@ export class HeaderComponent implements OnInit {
 
   userLoggedIn = false;
   userRole: string; //0: user; 1: user manager; 2: admin
+  userRoleAsNumber:number;
   roles = ['User', 'User manager', 'Admin'];
   notHome = false;
   timeInterval:number;
@@ -29,6 +30,7 @@ export class HeaderComponent implements OnInit {
       (currentUser:User) => {
         if (currentUser) {
           this.userLoggedIn = true;
+          this.userRoleAsNumber = currentUser.role;
           this.userRole = this.roles[currentUser.role];
         } else {
           this.userLoggedIn = false;

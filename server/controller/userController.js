@@ -31,12 +31,15 @@ router.post('/register', function (req, res) {
 
 router.post('/login', function (req, res) {
 
-    userDb.findOne({ username: req.body.username }, function (err, user) {
+    userDb.findOne(
+      {username: req.body.username },
+      function (err, user) {
         if (err) return res.status(500).send('Error on the server.');
         if (!user) return res.status(404).send('No user found.');
         var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
         if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
         var token = jwt.sign({ id: user._id, role: user.role }, config.secret, {expiresIn: expireTime});
+        user.password = null;
         res.status(200).send({ auth: true, token: token, user:user });
     });
 });
@@ -47,11 +50,11 @@ router.get('/', function (req, res) {
     if (token) {
         jwt.verify(token, config.secret, function(err, decoded) {
            if (err) return;
-           console.log(decoded.role);
+           console.log("decoded:", decoded);
         });
     }
     // TODO move this in the verify callback, and activated only for admin and userManager
-    userDb.find({}, function (err, users) {
+    userDb.find({}, {password:false}, function (err, users) {
         if (err) return res.status(500).send("There was a problem finding the users.");
         res.status(200).send(users);
     });
@@ -59,7 +62,7 @@ router.get('/', function (req, res) {
 
 // User actions
 router.get('/:id', function (req, res) {
-    userDb.findById(req.params.id, function (err, user) {
+    userDb.findById(req.params.id, {password: 0}, function (err, user) {
         if (err) return res.status(500).send("There was a problem finding the user.");
         if (!user) return res.status(404).send("No user found.");
         res.status(200).send(user);

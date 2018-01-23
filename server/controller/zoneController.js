@@ -35,7 +35,6 @@ router.post('/', function(req, res) {
 });
 
 router.get('/', function (req, res) {
-
     // TODO move this in the verify callback, and activated only for admin and userManager
     var token = req.headers['x-access-token'];
     if (token) {
@@ -53,7 +52,27 @@ router.get('/', function (req, res) {
     } else {
         return res.status(500).send("There was no token added.");
     }
-
+});
+// timezones by user
+router.get('/byUser/', function (req, res) {
+  // TODO move this in the verify callback, and activated only for admin and userManager
+  var token = req.headers['x-access-token'];
+  console.log(req.query);
+  if (token) {
+    jwt.verify(token, config.secret, function(err, decoded) {
+      if (err) {
+        return res.status(500).send("There was an error with token decode.");
+        ;
+      }
+      var owner = req.query.id;
+      zoneDb.find({owner: owner}, function (err, zones) {
+        if (err) return res.status(500).send("There was a problem finding the users.");
+        res.status(200).send(zones);
+      });
+    });
+  } else {
+    return res.status(500).send("There was no token added.");
+  }
 });
 
 // timezone actions
@@ -68,7 +87,8 @@ router.get('/:id', function (req, res) {
 router.delete('/:id', function (req, res) {
     zoneDb.findByIdAndRemove(req.params.id, function (err, zone) {
         if (err) return res.status(500).send("There was a problem deleting the zone.");
-        res.status(200).send("User "+ zone.name +" was deleted.");
+        console.log('zone deleted');
+        res.status(200).send({});
     });
 });
 

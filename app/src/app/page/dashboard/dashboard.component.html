@@ -1,9 +1,22 @@
-<div class="container">
+<div *ngIf="zones.length==0" class="container">
   <div class="row">
     <div class="col-sm-12">
       <div class="text-center">Welcome to your dashboard!</div>
       <div class="text-center">You can add a timezone with the button below:</div>
-      <div class="text-center"><button class="btn btn-primary">+ Add time zone</button></div>
+      <div class="text-center"><button (click)="addZone()" class="btn btn-primary">+ Add time zone</button></div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="zones.length>0" class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="text-center">Welcome to your dashboard!</div>
+      <div class="text-center">These are the timezones you added:</div>
+      <div class="col-sm-12" *ngFor="let zone of zones">
+        <app-singlezone [zone]="zone"></app-singlezone>
+      </div>
+      <div class="text-center"><button (click)="addZone()" class="btn btn-primary">+ Add time zone</button></div>
     </div>
   </div>
 </div>

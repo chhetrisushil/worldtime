@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
+import {ZoneService} from "../../services/zone.service";
 
 @Component({
   selector: 'app-login',
@@ -15,6 +16,7 @@ export class LoginComponent implements OnInit {
   };
 
   constructor(private userService:UserService,
+              private zoneService:ZoneService,
               private router:Router) { }
 
   ngOnInit() {
@@ -28,9 +30,21 @@ export class LoginComponent implements OnInit {
         data => {
           console.log('on data:', data);
           if (data['auth']) {
-            console.log('authenticated!');
             this.userService.setCurrentUser(data);
-            this.router.navigate(['/zones']);
+            this.zoneService.getZonesForCurrentUser(
+                 this.userService.currentUser._id,
+                 this.userService.currentUser.token)
+              .subscribe(
+                (zones:Object) => {
+                  this.userService.currentUser.zones = zones;
+                  this.userService.refreshCurrentUser();
+                  this.router.navigate(['/zones']);
+                },
+                error => {
+
+                }
+              )
+
           }
         },
         error => {
