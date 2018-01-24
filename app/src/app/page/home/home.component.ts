@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {TimeService} from "../../services/time.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'app-home',
@@ -9,21 +10,16 @@ import {TimeService} from "../../services/time.service";
 export class HomeComponent implements OnInit {
 
   currentTime:string;
-  constructor(private time:TimeService) { }
+  sub:Subscription;
+  constructor(private ts:TimeService) { }
 
   ngOnInit() {
-    this.startTimeInterval();
-  }
-
-  startTimeInterval() {
-    this.currentTime = this.time.getCurrentTime();
-    setInterval(() => {
-      this.getCurrentTime();
-    }, 1000);
-  }
-
-  getCurrentTime() {
-    this.currentTime = this.time.getCurrentTime();
+    this.currentTime = this.ts.convertCurrentTime(new Date());
+    this.sub = this.ts.timeUpdate.subscribe(
+      (date:Date) => {
+        this.currentTime = this.ts.convertCurrentTime(date)
+      }
+    )
   }
 
 }

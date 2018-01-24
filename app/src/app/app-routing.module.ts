@@ -7,6 +7,7 @@ import {DashboardComponent} from "./page/dashboard/dashboard.component";
 import {UsersComponent} from "./page/users/users.component";
 import {AuthGuard} from "./guards/auth-guard.service";
 import {UserDetailComponent} from "./page/user-detail/user-detail.component";
+import {NewUserComponent} from "./page/new-user/new-user.component";
 
 const appRoutes:Routes = [
 
@@ -14,6 +15,7 @@ const appRoutes:Routes = [
   {path: 'login', component: LoginComponent},
   {path: 'signup', component: SignupComponent},
   {path: 'zones', canActivate:[AuthGuard],component: DashboardComponent},
+  {path: 'newuser', canActivate:[AuthGuard],component: NewUserComponent},
   {path: 'users', canActivate:[AuthGuard], component: UsersComponent},
   {path: 'details/:id', canActivate:[AuthGuard], component: UserDetailComponent},
 

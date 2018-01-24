@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import {UserService} from "../../services/user.service";
 import {User} from "../../models/user.model";
+import {UserService} from "../../services/user.service";
 import {Router} from "@angular/router";
 
 @Component({
-  selector: 'app-signup',
-  templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  selector: 'app-new-user',
+  templateUrl: './new-user.component.html',
+  styleUrls: ['./new-user.component.css']
 })
-export class SignupComponent implements OnInit {
+export class NewUserComponent implements OnInit {
 
   model: any = {
     username:'',
@@ -23,7 +23,7 @@ export class SignupComponent implements OnInit {
   ngOnInit() {
   }
 
-  register() {
+  createUser() {
     let a = new User();
     a.parse(this.model);
     this.userService.createNewUser(a, this.model.pwd)
@@ -31,7 +31,7 @@ export class SignupComponent implements OnInit {
         data => {
           if (data['auth']) {
             this.userService.setCurrentUser(data);
-            this.router.navigate(['/zones']);
+            this.router.navigate(['/users']);
           }
         },
         error => {

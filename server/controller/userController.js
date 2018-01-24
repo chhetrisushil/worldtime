@@ -70,14 +70,18 @@ router.get('/:id', function (req, res) {
 });
 
 router.delete('/:id', function (req, res) {
-    userDb.findByIdAndRemove(req.params.id, function (err, user) {
-        if (err) return res.status(500).send("There was a problem deleting the user.");
-        res.status(200).send("User "+ user.name +" was deleted.");
-    });
+  console.log('delete called')
+  userDb.findByIdAndRemove(req.params.id, function (err, user) {
+      if (err) return res.status(500).send("There was a problem deleting the user.");
+      console.log('user deleted');
+      res.status(200).send({});
+  });
 });
 
 router.put('/:id', function (req, res) {
-
+    console.log('on put:', req.body);
+    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+    req.body.password = hashedPassword;
     userDb.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, user) {
         if (err) return res.status(500).send("There was a problem updating the user.");
         res.status(200).send(user);

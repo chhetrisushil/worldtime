@@ -20,6 +20,7 @@ import { UsersComponent } from './page/users/users.component';
 import { SingleUserComponent } from './components/single-user/single-user.component';
 import {AuthGuard} from "./guards/auth-guard.service";
 import { UserDetailComponent } from './page/user-detail/user-detail.component';
+import { NewUserComponent } from './page/new-user/new-user.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { UserDetailComponent } from './page/user-detail/user-detail.component';
     SinglezoneComponent,
     UsersComponent,
     SingleUserComponent,
-    UserDetailComponent
+    UserDetailComponent,
+    NewUserComponent
   ],
   imports: [
     BrowserModule,

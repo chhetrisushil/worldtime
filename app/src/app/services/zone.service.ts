@@ -3,10 +3,12 @@ import {Zone} from "../models/zone.model";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {AppConfig} from "../app.config";
 import {UserService} from "./user.service";
+import {Subject} from "rxjs/Subject";
 
 @Injectable()
 export class ZoneService {
 
+  zonesUpdated = new Subject();
   constructor(private httpClient:HttpClient,
               private config:AppConfig) {
 

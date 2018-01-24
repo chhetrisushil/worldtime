@@ -28,7 +28,6 @@ export class LoginComponent implements OnInit {
     this.userService.login(this.model.username, this.model.password)
       .subscribe(
         data => {
-          console.log('on data:', data);
           if (data['auth']) {
             this.userService.setCurrentUser(data);
             this.zoneService.getZonesForCurrentUser(

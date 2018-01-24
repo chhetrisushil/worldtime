@@ -1,0 +1,37 @@
+<div class = "container">
+  <div class="wrapper">
+    <form #f="ngForm" action="" method="post" name="Login_Form" class="form-signin">
+      <h3 class="form-signin-heading">Create a new user!</h3>
+
+      <label for="Username">Username:</label>
+      <input type="text"
+             class="form-control" id="Username"
+             name="Username" placeholder="Username"
+             [(ngModel)]="model.username"
+             required="" autofocus="" />
+      <br>
+      <label for="password">Password:</label>
+      <input type="Password"
+             class="form-control"
+             name="Password" id="Password"
+             [(ngModel)]="model.pwd"
+             placeholder="Password" required=""/>
+      <label for="Password2">Repeat password:</label>
+      <input type="password"
+             class="form-control"
+             name="Password2" id="Password2"
+             [(ngModel)]="model.pwd2"
+             placeholder="Repeat password" required=""/>
+      <label for="userRole">User role:</label>
+      <select class="select btn-primary" id="userRole" name="userRole"
+              [(ngModel)]="model.role" style="font-size: large" >
+        <option value="0">User</option>
+        <option value="1">User manager</option>
+        <option value="2">Admin</option>
+      </select>
+      <br><br>
+      <button class="btn btn-lg btn-primary btn-block"  name="Submit"
+              value="Signup" type="Submit" (click)="createUser()">Create user</button>
+    </form>
+  </div>
+</div>

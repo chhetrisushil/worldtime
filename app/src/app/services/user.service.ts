@@ -11,11 +11,11 @@ export class UserService {
 
   currentUser:User = null;
   userActivated = new Subject();
+  allUsers = new Subject();
 
   constructor(private httpClient: HttpClient,
               private config: AppConfig,
               private zoneService:ZoneService) {
-    this.currentUser.zones = [];
   }
 
   createNewUser(user: User, pass:string) {
@@ -34,7 +34,6 @@ export class UserService {
     }
     this.currentUser.parse(user.user);
     this.currentUser.token = user.token;
-    console.log('current user set to ', this.currentUser);
     this.userActivated.next(this.currentUser);
   }
 
@@ -71,6 +70,23 @@ export class UserService {
       this.config.apiUrl+'/users/'+id,
       {
         headers: new HttpHeaders().set('x-access-token', this.currentUser.token)
+      })
+  }
+
+  deleteUser(id:string, token) {
+    return this.httpClient.delete(
+      this.config.apiUrl+'/users/'+id,
+      {
+        headers: new HttpHeaders().set('x-access-token', token)
+      })
+  }
+
+  updateUser(user:any, token:string) {
+    return this.httpClient.put(
+      this.config.apiUrl+'/users/'+user['_id'],
+      user,
+      {
+        headers: new HttpHeaders().set('x-access-token', token)
       })
   }
 

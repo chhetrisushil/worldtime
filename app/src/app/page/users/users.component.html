@@ -6,7 +6,11 @@
       <div class="col-sm-12" *ngFor="let user of users">
         <app-single-user [user]="user"></app-single-user>
       </div>
-      <div class="text-center"></div>
+      <br>
+      <div class="text-center">
+        <button class="btn btn-primary"
+                (click)="onAddUser()">+Add user</button>
+      </div>
     </div>
   </div>
 </div>

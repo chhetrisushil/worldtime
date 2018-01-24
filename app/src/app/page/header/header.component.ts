@@ -3,6 +3,7 @@ import {UserService} from "../../services/user.service";
 import {User} from "../../models/user.model";
 import {NavigationStart, Router} from "@angular/router";
 import {TimeService} from "../../services/time.service";
+import {Subscription} from "rxjs/Subscription";
 
 @Component({
   selector: 'app-header',
@@ -17,11 +18,12 @@ export class HeaderComponent implements OnInit {
   roles = ['User', 'User manager', 'Admin'];
   notHome = false;
   timeInterval:number;
+  sub:Subscription;
   currentTime:string;
 
   constructor(private userService:UserService,
               private router:Router,
-              private time:TimeService) {
+              private ts:TimeService) {
 
   }
 
@@ -40,6 +42,12 @@ export class HeaderComponent implements OnInit {
       }
     );
 
+    this.sub = this.ts.timeUpdate.subscribe(
+      (date:Date) => {
+        this.currentTime = this.ts.convertCurrentTime(date)
+      }
+    )
+
     this.router.events.subscribe(
       event => {
         if (event instanceof NavigationStart) {
@@ -47,18 +55,18 @@ export class HeaderComponent implements OnInit {
         }
       }
     );
+  }
 
-    this.startTimeInterval();
+  onHomeClick() {
+    let dest = this.userService.currentUser ? '/zones' : '/';
+    this.router.navigate([dest]);
   }
 
   logout() {
     this.userService.logout();
+    this.userLoggedIn = false;
+    this.userRoleAsNumber = null;
+    this.userRole = null;
     this.router.navigate(['/']);
-  }
-
-  startTimeInterval() {
-    this.timeInterval = window.setInterval(() => {
-      this.currentTime = this.time.getCurrentTime();
-    }, 1000);
   }
 }

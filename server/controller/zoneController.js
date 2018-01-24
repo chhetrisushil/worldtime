@@ -19,7 +19,7 @@ router.post('/', function(req, res) {
             }
             var owner = decoded.id;
             zoneDb.create({
-                    owner : owner,
+                    owner : req.body.owner || owner,
                     name: req.body.name,
                     city: req.body.city,
                     offset: req.body.offset

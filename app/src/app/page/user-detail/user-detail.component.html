@@ -1,3 +1,53 @@
-<p>
-  user-detail works!
-</p>
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+      <h2>User details</h2>
+      <h3>Username: {{selectedUser.username}}</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-4">
+      <h3>Set new password</h3>
+      <label for="password">Password:</label>
+      <input type="Password"
+             class="form-control"
+             name="Password" id="Password"
+             [(ngModel)]="model.pwd"
+             placeholder="Password" required=""/>
+      <label for="Password2">Repeat password:</label>
+      <input type="password"
+             class="form-control"
+             name="Password2" id="Password2"
+             [(ngModel)]="model.pwd2"
+             placeholder="Repeat password" required=""/>
+      <button class="btn btn-primary" (click)="editUser()">Change password</button>
+    </div>
+    <div class="col-sm-8"></div>
+  </div>
+  <div *ngIf="isAdmin" class="row">
+    <div class="col-sm-12">
+      <h2>Timezones</h2>
+      <div *ngIf="selectedUserZones.length==0" class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="text-center">This user didn't add any timezones!</div>
+            <div class="text-center">You can add a timezone with the button below:</div>
+            <div class="text-center"><button (click)="addZone()" class="btn btn-primary">+ Add time zone</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div *ngIf="selectedUserZones.length>0" class="container">
+        <div class="row">
+          <div class="col-sm-12">
+            <div class="text-center">These are the timezones added by the user:</div>
+            <div class="col-sm-12" *ngFor="let zone of selectedUserZones">
+              <app-singlezone [zone]="zone"></app-singlezone>
+            </div>
+            <div class="text-center"><button (click)="addZone()" class="btn btn-primary">+ Add time zone</button></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

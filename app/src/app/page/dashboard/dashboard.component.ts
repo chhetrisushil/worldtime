@@ -12,8 +12,7 @@ export class DashboardComponent implements OnInit {
 
   zones = [];
 
-  constructor(private userService:UserService,
-              private changeRef:ChangeDetectorRef) { }
+  constructor(private userService:UserService) { }
 
   ngOnInit() {
     this.zones = this.userService.currentUser.zones || [];
@@ -21,7 +20,6 @@ export class DashboardComponent implements OnInit {
       (currentUser:User) => {
         if (currentUser) {
           this.zones = currentUser.zones || [];
-          console.log('zones:', this.zones);
           //this.changeRef.detectChanges();
         }
       }
@@ -31,7 +29,6 @@ export class DashboardComponent implements OnInit {
   addZone() {
     let emptyZone = new Zone();
     this.zones.push(emptyZone);
-    console.log(this.zones);
   }
 
 }

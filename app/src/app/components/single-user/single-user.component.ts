@@ -12,7 +12,6 @@ export class SingleUserComponent implements OnInit {
   @Input() user:any;
   roles = ['User', 'User manager', 'Admin'];
   isCurrentUser = false;
-  isAdmin = false;
   constructor(private userService:UserService,
               private router:Router) { }
 
@@ -20,8 +19,6 @@ export class SingleUserComponent implements OnInit {
     if (this.user._id === this.userService.currentUser._id) {
       this.isCurrentUser = true;
     }
-    console.log('role:', this.userService.currentUser.role);
-    this.isAdmin = (this.userService.currentUser.role == 2);
   }
 
   onDetails() {
@@ -29,6 +26,14 @@ export class SingleUserComponent implements OnInit {
   }
 
   onDelete() {
-
+    this.userService.deleteUser(this.user._id, this.userService.currentUser.token)
+      .subscribe(
+        data => {
+          this.userService.allUsers.next(null);
+        },
+        error => {
+          console.log('error on delete:', error);
+        }
+      )
   }
 }

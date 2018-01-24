@@ -3,6 +3,7 @@ export class Zone {
   city:string;
   offset:number;
   editMode:boolean = true;
+  owner:string;
   _id:string;
 
   constructor() {}
