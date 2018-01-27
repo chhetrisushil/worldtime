@@ -17,6 +17,8 @@ export class UserDetailComponent implements OnInit {
   };
   isAdmin = false;
   selectedUserZones: any = [];
+  changeSuccess = false;
+  changeError = false;
   model:any = {
     pwd: '',
     pwd2: ''
@@ -47,7 +49,20 @@ export class UserDetailComponent implements OnInit {
         error => {
           console.log('error', error);
         }
-      )
+      );
+    this.zoneService.zonesUpdated.subscribe(
+      val => {
+        this.zoneService.getZonesForUser(this.selectedUser._id, this.userService.currentUser.token)
+          .subscribe(
+            zones => {
+              this.selectedUserZones = zones;
+            },
+            err => {
+              console.log('error 3', err);
+            }
+          )
+      }
+    )
   }
 
   editUser() {
@@ -57,9 +72,13 @@ export class UserDetailComponent implements OnInit {
       .subscribe(
         data => {
           console.log('data on put:', data)
+          this.model.pwd = this.model.pwd2 = '';
+          this.changeSuccess = true;
         },
         error => {
-          console.log('error on put:', error)
+          console.log('error on put:', error);
+          this.model.pwd = this.model.pwd2 = '';
+          this.changeError = true;
         }
       )
   }

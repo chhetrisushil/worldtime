@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
     username:'',
     password:''
   };
+  invalid = false;
 
   constructor(private userService:UserService,
               private zoneService:ZoneService,
@@ -47,7 +48,8 @@ export class LoginComponent implements OnInit {
           }
         },
         error => {
-          console.log('on err:', error)
+          console.log('on err:', error);
+          this.invalid = true;
         }
       )
   }

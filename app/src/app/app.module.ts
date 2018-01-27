@@ -21,6 +21,8 @@ import { SingleUserComponent } from './components/single-user/single-user.compon
 import {AuthGuard} from "./guards/auth-guard.service";
 import { UserDetailComponent } from './page/user-detail/user-detail.component';
 import { NewUserComponent } from './page/new-user/new-user.component';
+import { ProfileComponent } from './pages/profile/profile.component';
+import { AllZonesComponent } from './page/all-zones/all-zones.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +36,9 @@ import { NewUserComponent } from './page/new-user/new-user.component';
     UsersComponent,
     SingleUserComponent,
     UserDetailComponent,
-    NewUserComponent
+    NewUserComponent,
+    ProfileComponent,
+    AllZonesComponent
   ],
   imports: [
     BrowserModule,

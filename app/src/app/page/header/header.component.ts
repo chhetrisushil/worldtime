@@ -28,8 +28,15 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log(this.userService.currentUser);
+    if (this.userService.currentUser) {
+      this.userLoggedIn = true;
+      this.userRoleAsNumber = this.userService.currentUser.role;
+      this.userRole = this.roles[this.userService.currentUser.role];
+    }
     this.userService.userActivated.subscribe(
       (currentUser:User) => {
+        console.log('header:', currentUser);
         if (currentUser) {
           this.userLoggedIn = true;
           this.userRoleAsNumber = currentUser.role;

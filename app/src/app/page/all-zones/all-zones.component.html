@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-2"></div>
+    <div class="col-sm-8">
+      <input type="text"
+             class="form-control"
+             id="filter"
+             [(ngModel)]="model.filter"
+             placeholder="Search for timezone"
+             (keyup)="onFilterUpdate()"/>
+    </div>
+    <div class="col-sm-2">
+      <button class="btn btn-primary" (click)="onFilter()">Search timezones</button>
+    </div>
+  </div>
+  <!-- Static filtering -->
+  <!--div class="row">
+    <div class="col-sm-12">
+      <div class="text-center">Welcome to your dashboard!</div>
+      <div class="text-center">These are the timezones you added:</div>
+      <div class="col-sm-12" *ngFor="let zone of zones">
+        <app-singlezone *ngIf="model.filter == '' || zone.name.indexOf(model.filter) > -1" [zone]="zone"></app-singlezone>
+      </div>
+    </div>
+  </div-->
+  <!-- Server filtering -->
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="text-center">Welcome to your dashboard!</div>
+      <div class="text-center">These are the timezones you added:</div>
+      <div class="col-sm-12" *ngFor="let zone of zones">
+        <app-singlezone [zone]="zone"></app-singlezone>
+      </div>
+    </div>
+  </div>
+</div>
+

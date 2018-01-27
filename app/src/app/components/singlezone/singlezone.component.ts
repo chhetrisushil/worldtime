@@ -29,7 +29,6 @@ export class SinglezoneComponent implements OnInit, OnDestroy {
               private ts:TimeService) { }
 
   ngOnInit() {
-    console.log('zone:', this.zone);
     if (this.zone.name === undefined) {
       this.editMode = true;
     }
@@ -39,8 +38,8 @@ export class SinglezoneComponent implements OnInit, OnDestroy {
     this.zoneTime = this.ts.convertCurrentTime(new Date(), +this.model.offset);
     this.sub = this.ts.timeUpdate.subscribe(
       (date:Date) => {
-        console.log('date:', this.model.offset);
-        this.zoneTime = this.ts.convertCurrentTime(date, +this.model.offset)
+        let nd:Date = new Date(date.getTime())
+        this.zoneTime = this.ts.convertCurrentTime(nd, +this.model.offset)
       }
     )
   }

@@ -29,10 +29,11 @@ export class UserService {
   }
 
   setCurrentUser(user:any) {
+    console.log('set current user:', user)
     if (!this.currentUser) {
       this.currentUser = new User();
     }
-    this.currentUser.parse(user.user);
+    this.currentUser.parse(user.user || user);
     this.currentUser.token = user.token;
     this.userActivated.next(this.currentUser);
   }

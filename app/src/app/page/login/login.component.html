@@ -10,7 +10,7 @@
       <input type="password" class="form-control"
              name="Password" placeholder="Password"
              required="" [(ngModel)]="model.password"/>
-
+      <div style="color: red" *ngIf="invalid"><strong>Username or password incorrect!</strong></div>
       <button class="btn btn-lg btn-primary btn-block"  name="button"
               value="Login" type="Submit" (click)="doLogin()">Login</button>
       <button class="btn btn-lg btn-primary btn-block"  name="Signup"

@@ -16,6 +16,9 @@ export class SignupComponent implements OnInit {
     pwd2:'',
     role: 0
   };
+  invalidUsername = false;
+  invalidPassword = false;
+  empty = false;
 
   constructor(private userService:UserService,
               private router:Router) { }
@@ -24,18 +27,30 @@ export class SignupComponent implements OnInit {
   }
 
   register() {
+    if (this.model.username === '' ||
+        this.model.pwd === '' ||
+        this.model.pwd2 === '') {
+      this.empty = true;
+      return;
+    }
+
     let a = new User();
     a.parse(this.model);
     this.userService.createNewUser(a, this.model.pwd)
       .subscribe(
         data => {
+          console.log(data);
           if (data['auth']) {
-            this.userService.setCurrentUser(data);
+            let user = new User();
+            user.parse(data);
+            console.log('set current user after signup:', user);
+            this.userService.setCurrentUser(user);
             this.router.navigate(['/zones']);
           }
         },
         error => {
           console.log('on err:', error)
+          this.invalidUsername = true;
         }
       )
   }

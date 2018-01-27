@@ -20,7 +20,10 @@
              name="Password2" id="Password2"
              [(ngModel)]="model.pwd2"
              placeholder="Repeat password" required=""/>
+      <br>
       <button class="btn btn-primary" (click)="editUser()">Change password</button>
+      <div style="color:darkgreen" *ngIf="changeSuccess"><strong>Password changed successfully!</strong></div>
+      <div style="color:red" *ngIf="changeError"><strong>Error changing password!</strong></div>
     </div>
     <div class="col-sm-8"></div>
   </div>

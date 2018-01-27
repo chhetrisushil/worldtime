@@ -21,6 +21,15 @@ export class ZoneService {
         headers: new HttpHeaders().set('x-access-token', token)
       })
   }
+
+  getAllZones(token:string) {
+    return this.httpClient.get(
+      this.config.apiUrl+'/zones/all',
+      {
+        headers: new HttpHeaders().set('x-access-token', token)
+      })
+  }
+
   getZonesForCurrentUser(id:string, token:string) {
     return this.httpClient.get(
       this.config.apiUrl+'/zones/',
@@ -48,6 +57,12 @@ export class ZoneService {
       {
         headers: new HttpHeaders().set('x-access-token', token)
       })
+  }
+
+  filterZone(query) {
+    return this.httpClient.get(
+      this.config.apiUrl+'/zones/filter/'+query
+    )
   }
 
   deleteZone(zone:Zone, token:string) {

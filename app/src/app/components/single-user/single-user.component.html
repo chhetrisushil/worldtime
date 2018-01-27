@@ -1,10 +1,10 @@
-<div class="container">
+<div class="container border">
   <div class="row">
-    <div class="col-sm-2">{{user.username}}</div>
-    <div class="col-sm-2">{{roles[user.role]}}</div>
-    <div class="col-sm-6">
+    <div class="col-sm-2">Username:<strong>{{user.username}}</strong></div>
+    <div class="col-sm-2">Role:<strong>{{roles[user.role]}}</strong></div>
+    <div class="col-sm-4">Timezones added:<strong>{{userZones}}</strong></div>
+    <div class="col-sm-4">
       <button class="btn btn-warning"
-              [disabled]="isCurrentUser"
               (click)="onDetails()">Details</button>
       <button class="btn btn-danger"
               [disabled]="isCurrentUser"

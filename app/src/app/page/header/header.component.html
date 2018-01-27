@@ -2,9 +2,12 @@
   <div class="container">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header">
-      <a class="navbar-brand" (click)="onHomeClick()">World time</a>
-      <a class="navbar-brand" *ngIf="notHome" >{{currentTime}}</a>
-      <a class="navbar-brand" *ngIf="userRoleAsNumber > 0" routerLink="/users">Manage users</a>
+      <a class="navbar-brand" (click)="onHomeClick()" style="cursor:pointer">World time</a>
+      <a class="navbar-brand" *ngIf="notHome" style="cursor:default">{{currentTime}}</a>
+      <a class="navbar-brand" *ngIf="userRoleAsNumber > 0"
+         routerLink="/users" style="cursor:pointer">Manage users</a>
+      <a class="navbar-brand" *ngIf="userRoleAsNumber == 2"
+         routerLink="/allzones" style="cursor:pointer">Manage zones</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
@@ -17,8 +20,9 @@
 
       <div *ngIf="userLoggedIn" class="collapse navbar-collapse" id="bs-example-navbar-collapse-2">
         <ul  class="nav navbar-nav navbar-right">
-          <li><a>Hello {{userRole}}</a></li>
-          <li><a (click)="logout()">Logout</a></li>
+          <li><a style="cursor:default">Hello {{userRole}}</a></li>
+          <li><a style="cursor:pointer" routerLink="/profile">Profile</a></li>
+          <li><a style="cursor:pointer" (click)="logout()">Logout</a></li>
         </ul>
       </div>
   </div><!-- /.container-fluid -->

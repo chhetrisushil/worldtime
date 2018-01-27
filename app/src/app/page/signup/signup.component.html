@@ -10,6 +10,7 @@
              name="Username" placeholder="Username"
              [(ngModel)]="model.username"
              required="" autofocus="" />
+      <div style="color: red" *ngIf="invalidUsername"><strong>Username is already in use!</strong></div>
       <br>
       <label for="password">Password:</label>
       <input type="Password"
@@ -22,7 +23,11 @@
              class="form-control"
              name="Password2" id="Password2"
              [(ngModel)]="model.pwd2"
-             placeholder="Repeat password" required=""/>
+             placeholder="Repeat password" required=""
+             (focus)="invalidPassword = false"
+             (focusout)="invalidPassword = model.pwd !== model.pwd2"/>
+      <div style="color: red" *ngIf="invalidPassword"><strong>Passwords do not match!</strong></div>
+      <div style="color: red" *ngIf="empty"><strong>All fields are required!</strong></div>
       <label for="userRole">User role:</label>
       <select class="select btn-primary" id="userRole" name="userRole"
               [(ngModel)]="model.role" style="font-size: large" >

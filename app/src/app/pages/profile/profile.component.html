@@ -1,0 +1,40 @@
+<div class="container">
+  <div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+      <fieldset class="scheduler-border">
+        <legend class="scheduler-border">Edit Profile</legend>
+        <div>Username: {{user.username}}</div>
+        <hr>
+        <div>Change password:</div>
+        <label for="old">Old password:</label>
+        <input type="password" [(ngModel)]="model.old"
+               class="form-control" id="old"
+               name="old" required="" />
+        <label for="newpass1">New password:</label>
+        <input type="password" [(ngModel)]="model.p1"
+               class="form-control" id="newpass1"
+               name="newpass1" required="" />
+        <label for="newpass2">Repeat new password:</label>
+        <input type="password" [(ngModel)]="model.p2"
+               class="form-control" id="newpass2"
+               name="newpass2" required="" />
+        <button type="button" class="btn btn-success"
+                (click)="onChangePassword()">Change password</button>
+        <div *ngIf="invalidPassword" style="color: red;">
+          <strong>Old password is invalid!</strong>
+        </div>
+        <div *ngIf="passDoesntMatch" style="color: red;">
+          <strong>New passwords don't match!</strong>
+        </div>
+        <div *ngIf="passChangeSuccess" style="color: red;">
+          <strong>Password changed successfully!</strong>
+        </div>
+        <div *ngIf="serverError" style="color: red;">
+          <strong>Error changing password. Please try again later!</strong>
+        </div>
+      </fieldset>
+    </div>
+    <div class="col-sm-3"></div>
+  </div>
+</div>

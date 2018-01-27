@@ -4,6 +4,7 @@ import {Subject} from "rxjs/Subject";
 @Injectable()
 export class TimeService {
   timeUpdate = new Subject();
+  date = new Date();
   timeInterval = null;
   constructor() {
     this.startTimeInterval();

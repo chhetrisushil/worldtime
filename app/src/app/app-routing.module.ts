@@ -8,6 +8,8 @@ import {UsersComponent} from "./page/users/users.component";
 import {AuthGuard} from "./guards/auth-guard.service";
 import {UserDetailComponent} from "./page/user-detail/user-detail.component";
 import {NewUserComponent} from "./page/new-user/new-user.component";
+import {ProfileComponent} from "./pages/profile/profile.component";
+import {AllZonesComponent} from "./page/all-zones/all-zones.component";
 
 const appRoutes:Routes = [
 
@@ -17,6 +19,8 @@ const appRoutes:Routes = [
   {path: 'zones', canActivate:[AuthGuard],component: DashboardComponent},
   {path: 'newuser', canActivate:[AuthGuard],component: NewUserComponent},
   {path: 'users', canActivate:[AuthGuard], component: UsersComponent},
+  {path: 'allzones', canActivate:[AuthGuard], component: AllZonesComponent},
+  {path: 'profile', canActivate:[AuthGuard], component: ProfileComponent},
   {path: 'details/:id', canActivate:[AuthGuard], component: UserDetailComponent},
 
   {path:'**', redirectTo:''}

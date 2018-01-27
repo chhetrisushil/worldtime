@@ -14,19 +14,28 @@ const expireTime = 86400;
 // AUTH
 router.post('/register', function (req, res) {
 
-    var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-
-    userDb.create({
+  userDb.findOne(
+    {username: req.body.username },
+    function (err, user) {
+      if (user) {
+        // user exists
+        res.status(500).send("User exists.");
+      } else {
+        var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+        userDb.create({
             username : req.body.username,
             role: req.body.role,
             password : hashedPassword
-        },
-        function (err, user) {
+          },
+          function (err, user) {
             if (err) return res.status(500).send("There was a problem adding the user to the database.");
 
             var token = jwt.sign({ id: user._id, role: user.role }, config.secret, {expiresIn: expireTime});
-            res.status(200).send({auth: true, token: token});
-        });
+            res.status(200).send({auth: true, token: token, user:user});
+          });
+      }
+    }
+  );
 });
 
 router.post('/login', function (req, res) {
@@ -50,14 +59,19 @@ router.get('/', function (req, res) {
     if (token) {
         jwt.verify(token, config.secret, function(err, decoded) {
            if (err) return;
-           console.log("decoded:", decoded);
+           userDb.find({},
+                       {password:false},
+                       {sort:{
+                           username: 1 //Sort by Date Added DESC
+                         }},
+              function (err, users) {
+               if (err) return res.status(500).send("There was a problem finding the users.");
+               res.status(200).send(users);
+              });
         });
     }
     // TODO move this in the verify callback, and activated only for admin and userManager
-    userDb.find({}, {password:false}, function (err, users) {
-        if (err) return res.status(500).send("There was a problem finding the users.");
-        res.status(200).send(users);
-    });
+
 });
 
 // User actions

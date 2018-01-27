@@ -30,7 +30,7 @@ export class NewUserComponent implements OnInit {
       .subscribe(
         data => {
           if (data['auth']) {
-            this.userService.setCurrentUser(data);
+            //this.userService.setCurrentUser(data);
             this.router.navigate(['/users']);
           }
         },
