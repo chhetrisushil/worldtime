@@ -5,7 +5,7 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.use(bodyParser.json());
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
-const config = require('../config/db');
+const config = require('config');
 
 const userDb = require('../models/user');
 
@@ -58,7 +58,10 @@ router.get('/', function (req, res) {
     var token = req.headers['x-access-token'];
     if (token) {
         jwt.verify(token, config.secret, function(err, decoded) {
-           if (err) return;
+           if (err) return res.status(500).send("There was a problem decoding the token.");;
+           if (decoded.role == 0) {
+             return res.status(500).send("You don't have permission");
+           }
            userDb.find({},
                        {password:false},
                        {sort:{
@@ -84,16 +87,13 @@ router.get('/:id', function (req, res) {
 });
 
 router.delete('/:id', function (req, res) {
-  console.log('delete called')
   userDb.findByIdAndRemove(req.params.id, function (err, user) {
       if (err) return res.status(500).send("There was a problem deleting the user.");
-      console.log('user deleted');
       res.status(200).send({});
   });
 });
 
 router.put('/:id', function (req, res) {
-    console.log('on put:', req.body);
     var hashedPassword = bcrypt.hashSync(req.body.password, 8);
     req.body.password = hashedPassword;
     userDb.findByIdAndUpdate(req.params.id, req.body, {new: true}, function (err, user) {

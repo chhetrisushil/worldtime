@@ -7,5 +7,5 @@ var UserController = require('./controller/userController');
 var ZoneController = require('./controller/zoneController');
 app.use('/users', UserController);
 app.use('/zones', ZoneController);
-
+console.log('from app.js');
 module.exports = app;
