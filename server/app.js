@@ -1,3 +1,4 @@
+'use strict';
 var express = require('express');
 var app = express();
 var cors = require('cors');
@@ -10,5 +11,5 @@ require('./db');
 app.use(cors());
 app.use('/users', UserController);
 app.use('/zones', ZoneController);
-console.log('from app.js');
+// console.log('from app.js');
 module.exports = app;
