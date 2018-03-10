@@ -1,10 +1,13 @@
 var express = require('express');
 var app = express();
-var db = require('./db');
 var cors = require('cors');
-app.use(cors());
 var UserController = require('./controller/userController');
 var ZoneController = require('./controller/zoneController');
+
+// initialize db
+require('./db');
+
+app.use(cors());
 app.use('/users', UserController);
 app.use('/zones', ZoneController);
 console.log('from app.js');
