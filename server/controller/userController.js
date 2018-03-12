@@ -12,48 +12,55 @@ const userDb = require('../models/user');
 const expireTime = 86400;
 
 // AUTH
-router.post('/register', function (req, res) {
+router.post('/register', async function (req, res) {
+    try {
+        let user = await userDb.findOne({
+            username: req.body.username
+        }).exec();
 
-    userDb.findOne(
-        { username: req.body.username },
-        function (err, user) {
-            if (user) {
-                // user exists
-                res.status(500).send('User exists.');
-            } else {
-                var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-                userDb.create({
+        if (user) {
+            // user exists
+            res.status(500).send('User exists.');
+        } else {
+            try {
+                const hashedPassword = bcrypt.hashSync(req.body.password, 8);
+                user = await userDb.create({
                     username: req.body.username,
                     role: req.body.role,
                     password: hashedPassword
-                }, function (err, user) {
-                    if (err) return res.status(500).send('There was a problem adding the user to the database.');
-
-                    try {
-                        var token = jwt.sign({ id: user._id, role: user.role }, config.secret, { expiresIn: expireTime });
-                        res.status(200).send({ auth: true, token: token, user: user });
-                    } catch (e) {
-                        res.status(500).send(e.message);
-                    }
                 });
+
+                const token = jwt.sign({ id: user._id, role: user.role }, config.secret, { expiresIn: expireTime });
+                user.password = null;
+
+                res.status(200).send({ auth: true, token: token, user: user });
+            } catch (e) {
+                res.status(500).send(`User creation failed with following error: ${e.message}`);
             }
         }
-    );
+    } catch (e) {
+        res.status(500).send(`Internal server error: ${e.message}`);
+    }
 });
 
-router.post('/login', function (req, res) {
+router.post('/login', async function (req, res) {
+    try {
+        const user = await userDb.findOne({
+            username: req.body.username
+        }).exec();
 
-    userDb.findOne(
-        { username: req.body.username },
-        function (err, user) {
-            if (err) return res.status(500).send('Error on the server.');
-            if (!user) return res.status(404).send('No user found.');
-            var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-            if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
-            var token = jwt.sign({ id: user._id, role: user.role }, config.secret, { expiresIn: expireTime });
-            user.password = null;
-            res.status(200).send({ auth: true, token: token, user: user });
-        });
+        if (!user) return res.status(404).send('No user found.');
+
+        var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
+        if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
+
+        var token = jwt.sign({ id: user._id, role: user.role }, config.secret, { expiresIn: expireTime });
+        user.password = null;
+
+        res.status(200).send({ auth: true, token: token, user: user });
+    } catch (e) {
+        res.status(500).send(`Internal server error ${e.message}`);
+    }
 });
 
 // All users
