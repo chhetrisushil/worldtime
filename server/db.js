@@ -1,5 +1,5 @@
 // db.js
-const config = require('config');
+const config = require('./config/default.json');
 const mongoose = require('mongoose');
 mongoose.connect(
     config.connectionString,
