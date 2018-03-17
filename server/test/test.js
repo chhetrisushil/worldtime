@@ -1,6 +1,6 @@
 process.env.NODE_ENV = 'test';
 
-let mongoose = require("mongoose");
+let mongoose = require('mongoose');
 let User = require('../models/user');
 let Zone = require('../models/timezone');
 
@@ -13,7 +13,7 @@ let userToken = '';
 let userId = '';
 let adminId = '';
 let adminToken = '',
-    zoneId;
+  zoneId;
 
 chai.use(chaiHttp);
 //Our parent block
@@ -71,8 +71,8 @@ describe('Users', () => {
         })
         .end((err, res) => {
           res.should.have.status(200);
-          done()
-        })
+          done();
+        });
     });
   });
 
@@ -156,7 +156,7 @@ describe('Users', () => {
           done();
         });
     });
-  })
+  });
 
   /*
    * Delete a user, and check that it doesn't exist
@@ -174,7 +174,7 @@ describe('Users', () => {
             .end((err, res) => {
               res.should.have.status(404);
               done();
-            })
+            });
         });
     });
   });
@@ -273,7 +273,7 @@ describe('Timezones', () => {
 
   describe('/GET /zones/byUser', () => {
     it('it should show timezones by specific user', (done) => {
-      let ownerId = 'bogusIdForTesting'
+      let ownerId = 'bogusIdForTesting';
       let zone = new Zone({owner: ownerId, name:'test 2', city: 'Boston', offset: 7});
       zone.save((err, zone) => {});
       zone = new Zone({owner: ownerId, name:'another test', city: 'Boston', offset: 3});

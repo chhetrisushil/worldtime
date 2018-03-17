@@ -2,14 +2,14 @@
 const config = require('./config/default.json');
 const mongoose = require('mongoose');
 mongoose.connect(
-    config.connectionString,
-    { useMongoClient: true });
+  config.connectionString,
+  { useMongoClient: true });
 
 const db = mongoose.connection;
 
 db.on('error', err => {
-    console.error(`Error while connecting to DB: ${err.message}`);
+  console.error(`Error while connecting to DB: ${err.message}`);
 });
 db.once('open', () => {
-    console.log('DB connected successfully!');
+  console.log('DB connected successfully!');
 });

@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
 
 var ZoneSchema = new mongoose.Schema({
-    owner: String,
-    name: String,
-    city: String,
-    offset: Number
+  owner: String,
+  name: String,
+  city: String,
+  offset: Number
 });
 
-ZoneSchema.index({name: 'text'});
+ZoneSchema.index({ name: 'text' });
 
 mongoose.model('Timezone', ZoneSchema);
 
