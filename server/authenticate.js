@@ -8,23 +8,21 @@ function authenticate(req, res, next) {
       return next();
     }
 
-    const token = req.headers['x-access-token'];
-    const isValid = jwt.verify(token, config.secret);
+    try {
+      const token = req.cookies.token;
+      const isValid = jwt.verify(token, config.secret);
 
-    const cookie = req.cookies.token;
-
-    console.log(cookie);
-
-    if (isValid) {
-      next();
-    } else {
-      res.status(401).send(`Unauthorised Access to ${req.path}`);
+      if (isValid) {
+        next();
+      } else {
+        throw new Error('Unauthorised Access');
+      }
+    } catch (e) {
+      return next({code: 401, msg: 'Unauthorised Access'});
     }
-
   } catch (e) {
-    res.status(500).send(`Internal Server Error: ${e.message}`);
+    next(500);
   }
-
 }
 
 module.exports = authenticate;

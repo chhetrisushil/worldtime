@@ -16,7 +16,7 @@ router.use(bodyParser.json());
 router.use(authenticate);
 
 // AUTH
-router.post('/register', async function (req, res) {
+router.post('/register', async (req, res, next) => {
   try {
     let user = await userDb.findOne({
       username: req.body.username
@@ -24,7 +24,7 @@ router.post('/register', async function (req, res) {
 
     if (user) {
       // user exists
-      res.status(500).send('User exists.');
+      res.status(200).send('User exists.');
     } else {
       try {
         const hashedPassword = bcrypt.hashSync(req.body.password, 8);
@@ -39,24 +39,24 @@ router.post('/register', async function (req, res) {
 
         res.status(200).send({ auth: true, token: token, user: user });
       } catch (e) {
-        res.status(500).send(`User creation failed with following error: ${e.message}`);
+        next(500);
       }
     }
   } catch (e) {
-    res.status(500).send(`Internal server error: ${e.message}`);
+    next(500);
   }
 });
 
-router.post('/login', async function (req, res) {
+router.post('/login', async (req, res, next) => {
   try {
     const user = await userDb.findOne({
       username: req.body.username
     }).exec();
 
-    if (!user) return res.status(404).send('No user found.');
+    if (!user) return next({ code: 401, msg: 'Username/Password does not match' });
 
     var passwordIsValid = bcrypt.compareSync(req.body.password, user.password);
-    if (!passwordIsValid) return res.status(401).send({ auth: false, token: null });
+    if (!passwordIsValid) return next({ code: 401, msg: 'Username/Password does not match' });
 
     var token = jwt.sign({ id: user._id, role: user.role }, config.secret, { expiresIn: expireTime });
     user.password = null;
@@ -66,59 +66,84 @@ router.post('/login', async function (req, res) {
       .status(200)
       .send({ auth: true, user: user, token: token });
   } catch (e) {
-    res.status(500).send(`Internal server error ${e.message}`);
+    next(500);
   }
 });
 
 // All users
-router.get('/', function (req, res) {
-  var token = req.headers['x-access-token'];
-  if (token) {
-    jwt.verify(token, config.secret, function (err, decoded) {
-      if (err) return res.status(500).send('There was a problem decoding the token.');
-      if (decoded.role == 0) {
-        return res.status(500).send('You don\'t have permission');
-      }
-      userDb.find({},
-        { password: false },
-        {
-          sort: {
-            username: 1 //Sort by Date Added DESC
-          }
-        },
-        function (err, users) {
-          if (err) return res.status(500).send('There was a problem finding the users.');
-          res.status(200).send(users);
-        });
-    });
-  }
-  // TODO move this in the verify callback, and activated only for admin and userManager
+router.get('/', async (req, res, next) => {
+  const token = req.cookies.token;
+  const decoded = jwt.verify(token, config.secret);
+  let response;
 
+  switch (decoded.role) {
+    case 'admin':
+      try {
+        response = await userDb.find({},
+          {
+            password: false
+          },
+          {
+            sort: {
+              username: 1
+            }
+          }).exec();
+      } catch (e) {
+        next(500);
+      }
+      break;
+
+    default:
+      next(500);
+  }
+
+  res.status(200).send(response);
 });
 
 // User actions
-router.get('/:id', function (req, res) {
-  userDb.findById(req.params.id, { password: 0 }, function (err, user) {
-    if (err) return res.status(500).send('There was a problem finding the user.');
-    if (!user) return res.status(404).send('No user found.');
+router.get('/:id', (req, res, next) => {
+  userDb.findById(req.params.id, { password: 0 }, (err, user) => {
+    if (err) return next(500);
+    if (!user) return next({ code: 404, msg: 'User not found' });
+
     res.status(200).send(user);
   });
 });
 
-router.delete('/:id', function (req, res) {
-  userDb.findByIdAndRemove(req.params.id, function (err/* , user */) {
-    if (err) return res.status(500).send('There was a problem deleting the user.');
+router.delete('/:id', (req, res, next) => {
+  userDb.findByIdAndRemove(req.params.id, (err/* , user */) => {
+    if (err) return next(500);
+
     res.status(200).send({});
   });
 });
 
-router.put('/:id', function (req, res) {
+router.put('/:id', (req, res, next) => {
   var hashedPassword = bcrypt.hashSync(req.body.password, 8);
   req.body.password = hashedPassword;
-  userDb.findByIdAndUpdate(req.params.id, req.body, { new: true }, function (err, user) {
-    if (err) return res.status(500).send('There was a problem updating the user.');
+  userDb.findByIdAndUpdate(req.params.id, req.body, { new: true }, (err, user) => {
+    if (err) return next(500);
+
     res.status(200).send(user);
   });
+});
+
+//error handling
+/**************************************************************************************
+ *                                                                                    *
+ *      ERROR HANDLING SHOULD ALWAYS BE DONE AFTER REGISTRATION OF ALL THE ROUTES     *
+ *                                                                                    *
+ **************************************************************************************/
+router.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
+  let msg = 'Internal Server Error';
+
+  err = err || { code: 500, msg };
+
+  if (typeof err === 'number') {
+    err = { code: err, msg };
+  }
+
+  res.status(err.code).send(err.msg);
 });
 
 module.exports = router;
